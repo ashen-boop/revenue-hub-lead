@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revenue Hub — Lead Form</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #ffffff;
+    color: #000000;
+    line-height: 1.5;
+    padding: 24px 16px 60px;
+  }
+
+  .form-wrap { max-width: 560px; margin: 0 auto; }
+
+  .form-header { margin-bottom: 40px; }
+  .form-header h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+  .form-header p { font-size: 14px; color: #555; }
+
+  .section {
+    margin-bottom: 36px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #eaeaea;
+  }
+  .section:last-of-type { border-bottom: none; }
+
+  .section-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #000;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00b050;
+  }
+
+  .field { margin-bottom: 18px; }
+
+  .field label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #000;
+  }
+  .field label .req { color: #ff4d6d; margin-left: 2px; }
+  .field label .opt { color: #999; font-weight: 400; font-size: 12px; margin-left: 4px; }
+
+  .sub-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 6px;
+    margin-top: 12px;
+  }
+  .sub-label:first-of-type { margin-top: 0; }
+
+  .hint {
+    display: block;
+    font-size: 12px;
+    color: #888;
+    margin-top: -4px;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  .row { display: grid; gap: 12px; }
+  .row-2 { grid-template-columns: 1fr 1fr; }
+  .row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .row-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  @media (max-width: 520px) {
+    .row-2, .row-3, .row-4 { grid-template-columns: 1fr; }
+  }
+
+  /* ---- Custom Dropdown ---- */
+  .custom-select {
+    position: relative;
+    user-select: none;
+  }
+
+  .custom-select-trigger {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 15px;
+    font-family: inherit;
+    color: #000;
+    background: #fafafa;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .custom-select-trigger:hover {
+    border-color: #d0d0d0;
+    background: #ffffff;
+  }
+
+  .custom-select.open .custom-select-trigger {
+    border-color: #00b050;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(0, 176, 80, 0.1);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .custom-select-trigger .placeholder { color: #999; }
+  .custom-select-trigger .value { color: #000; }
+
+  .custom-select-trigger .chevron {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+  .custom-select.open .chevron { transform: rotate(180deg); }
+
+  .custom-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1.5px solid #00b050;
+    border-top: none;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
+    z-index: 100;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+    margin-top: -1.5px;
+  }
+
+  .custom-select.open .custom-options {
+    max-height: 320px;
+    overflow-y: auto;
+    opacity: 1;
+  }
+
+  .custom-option {
+    padding: 13px 18px;
+    font-size: 15px;
+    color: #000;
+    cursor: pointer;
+    transition: background 0.15s ease, padding-left 0.15s ease;
+    border-bottom: 1px solid #f5f5f5;
+    line-height: 1.4;
+  }
+
+  .custom-option:last-child { border-bottom: none; }
+
+  .custom-option:hover {
+    background: #f0fdf6;
+    padding-left: 22px;
+    color: #00b050;
+  }
+
+  .custom-option.selected {
+    background: #e8faf0;
+    color: #00b050;
+    font-weight: 600;
+  }
+
+  .custom-option .option-sub {
+    display: block;
+    font-size: 12px;
+    color: #888;
+    margin-top: 2px;
+    font-weight: 400;
+  }
+
+  .custom-option:hover .option-sub,
+  .custom-option.selected .option-sub {
+    color: #00b050;
+    opacity: 0.8;
+  }
+
+  .custom-options::-webkit-scrollbar { width: 6px; }
+  .custom-options::-webkit-scrollbar-track { background: transparent; }
+  .custom-options::-webkit-scrollbar-thumb {
+    background: #d0d0d0;
+    border-radius: 10px;
+  }
+  .custom-options::-webkit-scrollbar-thumb:hover { background: #b0b0b0; }
+
+  .other-input { margin-top: 10px; display: none; }
+  .other-input.show { display: block; animation: slideDown 0.25s ease; }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .other-input input {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 15px;
+    font-family: inherit;
+    color: #000;
+    background: #fff;
+    border: 1.5px solid #ff4d6d;
+    border-radius: 14px;
+    outline: none;
+    transition: box-shadow 0.2s;
+  }
+  .other-input input:focus {
+    box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.1);
+  }
+
+  input[type="text"], input[type="email"], input[type="tel"] {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 15px;
+    font-family: inherit;
+    color: #000;
+    background: #fafafa;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 14px;
+    outline: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  }
+  input[type="text"]:hover, input[type="email"]:hover, input[type="tel"]:hover {
+    border-color: #d0d0d0;
+    background: #ffffff;
+  }
+  input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus {
+    border-color: #00b050;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(0, 176, 80, 0.1);
+  }
+
+  /* ---- Colour picker row ---- */
+  .colour-picker {
+    display: none;
+    margin-top: 12px;
+    padding: 14px;
+    background: #fafafa;
+    border: 1.5px dashed #e0e0e0;
+    border-radius: 14px;
+  }
+
+  .colour-picker.show {
+    display: block;
+    animation: slideDown 0.25s ease;
+  }
+
+  .colour-picker-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .colour-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .colour-swatch {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 2px solid #e5e5e5;
+    cursor: pointer;
+    position: relative;
+    overflow: visible;
+    transition: transform 0.15s, border-color 0.2s;
+    background: #ffffff;
+  }
+
+  .colour-swatch:hover {
+    transform: scale(1.05);
+    border-color: #00b050;
+  }
+
+  .colour-swatch input[type="color"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0;
+    border-radius: 10px;
+  }
+
+  .colour-swatch .colour-fill {
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    background: #ffffff;
+    pointer-events: none;
+  }
+
+  .colour-swatch .colour-remove {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #ff4d6d;
+    color: #fff;
+    border: 2px solid #fff;
+    font-size: 11px;
+    line-height: 1;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    padding: 0;
+  }
+
+  .colour-swatch.filled .colour-remove {
+    display: flex;
+  }
+
+  .add-colour-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 2px dashed #d0d0d0;
+    background: #ffffff;
+    color: #888;
+    font-size: 20px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .add-colour-btn:hover {
+    border-color: #00b050;
+    color: #00b050;
+    background: #f0fdf6;
+  }
+
+  .add-colour-btn.hidden { display: none; }
+
+  .colour-hex {
+    font-size: 12px;
+    color: #888;
+    margin-top: 8px;
+  }
+
+  .colour-text-input {
+    margin-top: 12px;
+  }
+
+  .colour-text-input label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 18px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    color: #000;
+    background: #00b050;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+    margin-top: 8px;
+    box-shadow: 0 4px 14px rgba(0, 176, 80, 0.2);
+  }
+  .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0, 176, 80, 0.3);
+    background: #00c258;
+  }
+  .submit-btn:active { transform: translateY(0); }
+
+  .privacy {
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="form-wrap">
+
+  <div class="form-header">
+    <h1>Revenue Hub</h1>
+    <p>Tell us about your business. We'll build a website that brings in money.</p>
+  </div>
+
+  <form id="revenueForm">
+
+    <!-- SECTION 1 -->
+    <div class="section">
+      <div class="section-title">Your Business</div>
+
+      <!-- Q1 -->
+      <div class="field">
+        <label>1. What do you sell, and how would you describe your business? <span class="req">*</span></label>
+        <span class="sub-label">What you sell</span>
+        <div class="custom-select" data-name="what-sell">
+          <div class="custom-select-trigger">
+            <span class="placeholder">Select one</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="custom-options">
+            <div class="custom-option">Physical products</div>
+            <div class="custom-option">Digital products</div>
+            <div class="custom-option">Services</div>
+            <div class="custom-option">Mix of products & services</div>
+            <div class="custom-option" data-other="true">Other</div>
+          </div>
+        </div>
+        <div class="other-input"><input type="text" placeholder="Please specify"></div>
+
+        <span class="sub-label">Business type</span>
+        <div class="custom-select" data-name="business-type">
+          <div class="custom-select-trigger">
+            <span class="placeholder">Select one</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="custom-options">
+            <div class="custom-option">Retail / Shop</div>
+            <div class="custom-option">Food & Beverage</div>
+            <div class="custom-option">Beauty & Wellness</div>
+            <div class="custom-option">Fashion & Apparel</div>
+            <div class="custom-option">Electronics & Gadgets</div>
+            <div class="custom-option">Home & Living</div>
+            <div class="custom-option">Health & Pharmacy</div>
+            <div class="custom-option">Education / Courses</div>
+            <div class="custom-option">Professional Services</div>
+            <div class="custom-option" data-other="true">Other</div>
+          </div>
+        </div>
+        <div class="other-input"><input type="text" placeholder="Please specify"></div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="field">
+        <label>2. Who do you sell to, and who is your main customer? <span class="req">*</span></label>
+        <div class="row row-2">
+          <div>
+            <span class="sub-label">Where you sell</span>
+            <div class="custom-select" data-name="sell-to">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">Local customers only</div>
+                <div class="custom-option">Nationwide</div>
+                <div class="custom-option">International</div>
+                <div class="custom-option">Both local & international</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="sub-label">Main customer</span>
+            <div class="custom-select" data-name="main-customer">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">Individuals (B2C)</div>
+                <div class="custom-option">Businesses (B2B)</div>
+                <div class="custom-option">Both</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="field">
+        <label>3. Do you currently sell online, and if you have a website, what issues do you see? <span class="req">*</span></label>
+        <span class="sub-label">Current online status</span>
+        <div class="custom-select" data-name="sell-online" data-conditional="true">
+          <div class="custom-select-trigger">
+            <span class="placeholder">Select one</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="custom-options">
+            <div class="custom-option">No, not at all</div>
+            <div class="custom-option">Only on social media</div>
+            <div class="custom-option">On marketplaces (Facebook, Instagram, Daraz)</div>
+            <div class="custom-option" data-show-issues="true">I have a website but it doesn't work well</div>
+            <div class="custom-option">I have a website and it works fine</div>
+          </div>
+        </div>
+
+        <div class="conditional-issues" style="display:none;">
+          <span class="sub-label">Website issues</span>
+          <div class="custom-select" data-name="website-issues">
+            <div class="custom-select-trigger">
+              <span class="placeholder">Select one</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="custom-options">
+              <div class="custom-option">No visitors</div>
+              <div class="custom-option">Visitors but no sales</div>
+              <div class="custom-option">Looks outdated</div>
+              <div class="custom-option">Hard to use on mobile</div>
+              <div class="custom-option">Slow loading</div>
+              <div class="custom-option">Can't accept payments</div>
+              <div class="custom-option">No way to manage orders</div>
+              <div class="custom-option" data-other="true">Other</div>
+            </div>
+          </div>
+          <div class="other-input"><input type="text" placeholder="Please specify"></div>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="field">
+        <label>4. How many products or services do you offer? <span class="req">*</span></label>
+        <div class="custom-select" data-name="product-count">
+          <div class="custom-select-trigger">
+            <span class="placeholder">Select one</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="custom-options">
+            <div class="custom-option">1 – 10</div>
+            <div class="custom-option">11 – 50</div>
+            <div class="custom-option">51 – 200</div>
+            <div class="custom-option">200+</div>
+            <div class="custom-option">Services only (no count)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="field">
+        <label>5. Which features do you need? <span class="req">*</span></label>
+        <div class="row row-4">
+          <div>
+            <span class="sub-label">Gallery</span>
+            <span class="hint">Photo/video showcase of your products or work</span>
+            <div class="custom-select" data-name="feature-gallery">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">Yes</div>
+                <div class="custom-option">No</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="sub-label">Accounts</span>
+            <span class="hint">Customer login, order history, saved details</span>
+            <div class="custom-select" data-name="feature-accounts">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">Yes</div>
+                <div class="custom-option">No</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="sub-label">Reviews</span>
+            <span class="hint">Customer ratings and written feedback on products</span>
+            <div class="custom-select" data-name="feature-reviews">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">Yes</div>
+                <div class="custom-option">No</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="sub-label">Blog</span>
+            <span class="hint">Articles, news, or guides to attract and inform customers</span>
+            <div class="custom-select" data-name="feature-blog">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">Yes</div>
+                <div class="custom-option">No</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section">
+      <div class="section-title">Your Brand</div>
+
+      <!-- Q6 -->
+      <div class="field">
+        <label>6. Do you have a business logo and brand colours? <span class="req">*</span></label>
+        <div class="row row-2">
+          <div>
+            <span class="sub-label">Logo</span>
+            <div class="custom-select" data-name="logo">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">Yes, I have a logo</div>
+                <div class="custom-option">No logo yet</div>
+                <div class="custom-option">I have one but want it improved</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="sub-label">Brand colours</span>
+            <div class="custom-select" data-name="brand-colours" data-colour-picker="true">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option" data-show-colours="true">Yes, I have specific colours</div>
+                <div class="custom-option">No, you decide for me</div>
+                <div class="custom-option">I have colours but want suggestions</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="colour-picker" id="colourPicker">
+          <span class="colour-picker-label">Pick your brand colours</span>
+          <div class="colour-swatches" id="colourSwatches">
+            <button type="button" class="add-colour-btn" id="addColourBtn">+</button>
+          </div>
+          <div class="colour-hex" id="colourHex">No colours added yet</div>
+
+          <div class="colour-text-input">
+            <label>Or write your colours in words <span class="opt">(optional)</span></label>
+            <input type="text" id="colourText" placeholder="e.g. Navy blue, gold, and white">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section">
+      <div class="section-title">Your Revenue Goal</div>
+
+      <!-- Q7 -->
+      <div class="field">
+        <label>7. What does "revenue" mean to you, and when do you want to start earning? <span class="req">*</span></label>
+        <div class="row row-2">
+          <div>
+            <span class="sub-label">Revenue meaning</span>
+            <div class="custom-select" data-name="revenue-meaning">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">Direct online sales</div>
+                <div class="custom-option">More enquiries / leads</div>
+                <div class="custom-option">Bookings / appointments</div>
+                <div class="custom-option">Both sales and leads</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="sub-label">Timeline</span>
+            <div class="custom-select" data-name="start-earning">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">ASAP</div>
+                <div class="custom-option">Within 2 weeks</div>
+                <div class="custom-option">Within 1 month</div>
+                <div class="custom-option">Within 3 months</div>
+                <div class="custom-option">Just exploring</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="field">
+        <label>8. Monthly revenue target? <span class="req">*</span></label>
+        <div class="custom-select" data-name="revenue-target">
+          <div class="custom-select-trigger">
+            <span class="placeholder">Select one</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="custom-options">
+            <div class="custom-option">Under LKR 100,000</div>
+            <div class="custom-option">LKR 100,000 – 500,000</div>
+            <div class="custom-option">LKR 500,000 – 1,000,000</div>
+            <div class="custom-option">LKR 1,000,000 – 5,000,000</div>
+            <div class="custom-option">Above LKR 5,000,000</div>
+            <div class="custom-option">Not sure yet</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section">
+      <div class="section-title">Payments & Delivery</div>
+
+      <!-- Q9 -->
+      <div class="field">
+        <label>9. Can you accept online payments, and which methods do you prefer? <span class="req">*</span></label>
+        <span class="sub-label">Payment gateway</span>
+        <div class="custom-select" data-name="online-payments">
+          <div class="custom-select-trigger">
+            <span class="placeholder">Select one</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="custom-options">
+            <div class="custom-option">Yes, I have a payment gateway</div>
+            <div class="custom-option">No, but I want to set one up</div>
+            <div class="custom-option">No, cash on delivery only</div>
+            <div class="custom-option">Bank transfer only</div>
+          </div>
+        </div>
+
+        <span class="sub-label">Preferred methods</span>
+        <div class="custom-select" data-name="payment-methods">
+          <div class="custom-select-trigger">
+            <span class="placeholder">Select one</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="custom-options">
+            <div class="custom-option">Card payments</div>
+            <div class="custom-option">Bank transfer</div>
+            <div class="custom-option">Cash on delivery</div>
+            <div class="custom-option">Digital wallets</div>
+            <div class="custom-option">All of the above</div>
+            <div class="custom-option" data-other="true">Other</div>
+          </div>
+        </div>
+        <div class="other-input"><input type="text" placeholder="Please specify"></div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="field">
+        <label>10. How and where do you deliver? <span class="req">*</span></label>
+        <div class="row row-2">
+          <div>
+            <span class="sub-label">Delivery method</span>
+            <div class="custom-select" data-name="delivery-method">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">Courier / delivery service</div>
+                <div class="custom-option">Customer pickup</div>
+                <div class="custom-option">Digital delivery</div>
+                <div class="custom-option">On-site service</div>
+                <div class="custom-option">No delivery needed</div>
+                <div class="custom-option" data-other="true">Other</div>
+              </div>
+            </div>
+            <div class="other-input"><input type="text" placeholder="Please specify"></div>
+          </div>
+          <div>
+            <span class="sub-label">Delivery area</span>
+            <div class="custom-select" data-name="delivery-area">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">Within my city only</div>
+                <div class="custom-option">Island-wide</div>
+                <div class="custom-option">International</div>
+                <div class="custom-option">Not applicable</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="section">
+      <div class="section-title">Stage & Budget</div>
+
+      <!-- Q11 -->
+      <div class="field">
+        <label>11. Where is your business right now? <span class="req">*</span></label>
+        <div class="custom-select" data-name="business-stage">
+          <div class="custom-select-trigger">
+            <span class="placeholder">Select one</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="custom-options">
+            <div class="custom-option">Just starting</div>
+            <div class="custom-option">Running but no online sales</div>
+            <div class="custom-option">Running with some online sales</div>
+            <div class="custom-option">Growing fast, need to scale</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q12 -->
+      <div class="field">
+        <label>12. What's your budget? <span class="req">*</span></label>
+        <div class="row row-3">
+          <div>
+            <span class="sub-label">One-time build</span>
+            <div class="custom-select" data-name="build-budget">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">Under 50K</div>
+                <div class="custom-option">50K – 100K</div>
+                <div class="custom-option">100K – 250K</div>
+                <div class="custom-option">250K – 500K</div>
+                <div class="custom-option">Above 500K</div>
+                <div class="custom-option">Need guidance</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="sub-label">Monthly maintenance</span>
+            <div class="custom-select" data-name="maintenance-budget">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">Under 5K</div>
+                <div class="custom-option">5K – 15K</div>
+                <div class="custom-option">15K – 30K</div>
+                <div class="custom-option">Above 30K</div>
+                <div class="custom-option">Need guidance</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="sub-label">Marketing</span>
+            <div class="custom-select" data-name="marketing-budget">
+              <div class="custom-select-trigger">
+                <span class="placeholder">Select</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-options">
+                <div class="custom-option">None for now</div>
+                <div class="custom-option">Under 10K</div>
+                <div class="custom-option">10K – 30K</div>
+                <div class="custom-option">30K – 100K</div>
+                <div class="custom-option">Above 100K</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q13 — PERSONAL INFO -->
+    <div class="section">
+      <div class="section-title">13. About You</div>
+
+      <div class="field">
+        <label>Your name <span class="req">*</span></label>
+        <input type="text" required placeholder="Full name">
+      </div>
+
+      <div class="field">
+        <label>Email address <span class="req">*</span></label>
+        <input type="email" required placeholder="you@example.com">
+      </div>
+
+      <div class="field">
+        <label>WhatsApp number <span class="req">*</span></label>
+        <input type="tel" required placeholder="+94 70 000 0000">
+      </div>
+
+      <div class="field">
+        <label>Business name <span class="req">*</span></label>
+        <input type="text" required placeholder="Your business name">
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn">Get My Revenue Plan →</button>
+    <p class="privacy">We respect your privacy. We'll WhatsApp or email you within 24 hours.</p>
+
+  </form>
+</div>
+
+<script>
+  /* ---------- Dropdown logic ---------- */
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.custom-select')) {
+      document.querySelectorAll('.custom-select.open').forEach(el => el.classList.remove('open'));
+    }
+  });
+
+  document.querySelectorAll('.custom-select').forEach(select => {
+    const trigger = select.querySelector('.custom-select-trigger');
+    const placeholder = trigger.querySelector('.placeholder');
+    const options = select.querySelectorAll('.custom-option');
+
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = select.classList.contains('open');
+      document.querySelectorAll('.custom-select.open').forEach(el => el.classList.remove('open'));
+      if (!isOpen) select.classList.add('open');
+    });
+
+    options.forEach(option => {
+      option.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const value = option.textContent.trim();
+
+        placeholder.textContent = value;
+        placeholder.classList.remove('placeholder');
+        placeholder.classList.add('value');
+
+        options.forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+
+        select.classList.remove('open');
+
+        if (select.dataset.conditional === 'true') {
+          const issuesBlock = select.closest('.field').querySelector('.conditional-issues');
+          if (issuesBlock) {
+            issuesBlock.style.display = option.dataset.showIssues === 'true' ? 'block' : 'none';
+          }
+        }
+
+        const directOther = select.parentElement.querySelector('.other-input');
+        if (directOther) {
+          if (option.dataset.other === 'true') {
+            directOther.classList.add('show');
+            directOther.querySelector('input').focus();
+          } else {
+            directOther.classList.remove('show');
+            directOther.querySelector('input').value = '';
+          }
+        }
+      });
+    });
+  });
+
+  /* ---------- Colour picker logic ---------- */
+  (function() {
+    const picker = document.getElementById('colourPicker');
+    const swatchesWrap = document.getElementById('colourSwatches');
+    const addBtn = document.getElementById('addColourBtn');
+    const hexLabel = document.getElementById('colourHex');
+    const MAX_COLOURS = 3;
+    let colours = [];
+
+    function renderSwatches() {
+      swatchesWrap.querySelectorAll('.colour-swatch').forEach(el => el.remove());
+
+      colours.forEach((hex, index) => {
+        const swatch = document.createElement('div');
+        swatch.className = 'colour-swatch filled';
+
+        const fill = document.createElement('div');
+        fill.className = 'colour-fill';
+        fill.style.background = hex;
+
+        const input = document.createElement('input');
+        input.type = 'color';
+        input.value = hex;
+        input.addEventListener('input', (e) => {
+          colours[index] = e.target.value;
+          fill.style.background = e.target.value;
+          updateHex();
+        });
+
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'colour-remove';
+        remove.textContent = '×';
+        remove.addEventListener('click', (e) => {
+          e.stopPropagation();
+          colours.splice(index, 1);
+          renderSwatches();
+        });
+
+        swatch.appendChild(fill);
+        swatch.appendChild(input);
+        swatch.appendChild(remove);
+        swatchesWrap.insertBefore(swatch, addBtn);
+      });
+
+      addBtn.classList.toggle('hidden', colours.length >= MAX_COLOURS);
+      updateHex();
+    }
+
+    function updateHex() {
+      hexLabel.textContent = colours.length === 0
+        ? 'No colours added yet'
+        : colours.join('  ·  ');
+    }
+
+    addBtn.addEventListener('click', () => {
+      if (colours.length >= MAX_COLOURS) return;
+      colours.push('#00b050');
+      renderSwatches();
+    });
+
+    const brandColourSelect = document.querySelector('[data-name="brand-colours"]');
+    if (brandColourSelect) {
+      brandColourSelect.querySelectorAll('.custom-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          if (opt.dataset.showColours === 'true') {
+            picker.classList.add('show');
+          } else {
+            picker.classList.remove('show');
+            colours = [];
+            renderSwatches();
+            const textInput = document.getElementById('colourText');
+            if (textInput) textInput.value = '';
+          }
+        });
+      });
+    }
+  })();
+
+  /* ---------- Submit ---------- */
+  document.getElementById('revenueForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('Thanks! We got your details. We\'ll WhatsApp or email you within 24 hours.');
+  });
+</script>
+
+</body>
+</html>
